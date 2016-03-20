@@ -7,13 +7,13 @@ from jinja2 import Markup
 import markdown
 
 
-@view_config(route_name='index_route', renderer='templates/list.jinja2')
+@view_config(route_name='index_route', renderer='../rick-mockups/list.jinja2')
 def post_index(request):
     entries = DBSession.query(Entry).all()
     return {'entries': entries}
 
 
-@view_config(route_name='entry_route', renderer='templates/entry.jinja2')
+@view_config(route_name='entry_route', renderer='../rick-mockups/entry.jinja2')
 def view_post(request):
     entry_id = '{id}'.format(**request.matchdict)
     entry_data = DBSession.query(Entry).filter(Entry.id == entry_id).first()
@@ -21,7 +21,7 @@ def view_post(request):
     return {'entry': entry_data}
 
 
-@view_config(route_name='new_route', renderer='templates/add.jinja2')
+@view_config(route_name='new_route', renderer='../rick-mockups/add.jinja2')
 def add_post(request):
     form = EntryForm(request.POST)
     if request.method == 'POST' and form.validate():
@@ -36,7 +36,7 @@ def add_post(request):
     return {'form': form, 'action': request.matchdict.get('action')}
 
 
-@view_config(route_name='edit_route', renderer='templates/add.jinja2')
+@view_config(route_name='edit_route', renderer='../rick-mockups/add.jinja2')
 def edit_post(request):
     entry_id = request.matchdict['entry']
     entry_query = DBSession.query(Entry).get(entry_id)
