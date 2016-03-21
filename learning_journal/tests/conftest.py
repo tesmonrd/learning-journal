@@ -8,7 +8,7 @@ import webtest
 from learning_journal.models import DBSession, Base, Entry
 
 
-TEST_DATABASE = 'postgresql://paulsheridan:@localhost:5432/testdb'
+TEST_DATABASE = 'postgresql://ricktesmond:@localhost:5432/testdb'
 
 
 @pytest.fixture(scope='session')
