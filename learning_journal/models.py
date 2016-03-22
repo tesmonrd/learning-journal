@@ -1,5 +1,6 @@
 from datetime import datetime
 from jinja2 import Markup
+from pyramid.security import Allow, Everyone, Authenticated
 import markdown
 
 from sqlalchemy import (
@@ -37,4 +38,15 @@ class Entry(Base):
 def render_markdown(content):
     marked = Markup(markdown.markdown(content))
     return marked
+
+
+class BaseFactory(object):
+    __acl__ = [
+        (Allow, Everyone, 'view'),
+        (Allow, Authenticated, 'add'),
+        (Allow, Authenticated, 'edit'),
+    ]
+
+    def __init__(self,request):
+        pass
 
