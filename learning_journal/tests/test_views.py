@@ -1,4 +1,4 @@
-# # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # from learning_journal.views import post_index, view_post
 # from pyramid.testing import DummyRequest
 # from learning_journal.models import DBSession, Entry

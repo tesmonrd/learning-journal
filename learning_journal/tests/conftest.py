@@ -2,7 +2,7 @@
 import pytest
 from sqlalchemy import create_engine
 import os
-import webtest
+from passlib.hash import sha256_crypt
 
 
 from learning_journal.models import DBSession, Base, Entry
@@ -61,3 +61,16 @@ def app(dbtransaction):
     os.environ['JOURNAL_DB'] = TEST_DATABASE
     app = main({}, **fake_settings)
     return TestApp(app)
+
+
+@pytest.fixture()
+def auth_env():
+    os.environ['AUTH_PASSWORD'] = sha256_crypt.encrypt('secret')
+    os.environ['AUTH_USERNAME'] = 'admin'
+
+
+@pytest.fixture()
+def authenticated_app(app, auth_env):
+    data = {'username': 'admin', 'password': 'secret'}
+    app.post('/login', data, status='3*')
+    return app
