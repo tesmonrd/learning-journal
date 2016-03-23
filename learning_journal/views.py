@@ -3,6 +3,7 @@ from pyramid.view import view_config
 from .models import Entry, DBSession
 from wtforms import Form, StringField, TextAreaField, validators
 from pyramid.httpexceptions import HTTPFound
+from passlib.hash import sha256_crypt
 from pyramid.security import (
     authenticated_userid,
     remember,
@@ -57,22 +58,24 @@ def edit_post(request):
     return {'form': form}
 
 
-@view_config(route_name='auth', match_param='action=in', renderer='string')
-@view_config(route_name='auth', match_param='action=out', renderer='string')
-def sign_in(request):
-    login_form = None
-    if request.method == 'Post':
-        login_form = LoginForm(request.POST)
-    if login_form and login_form.validate():
-        user = User.by_name(login_form.username.data)
-        if user and user.verify_password(login_form.password.data):
-            headers = remember(request, user.name)
-        else:
-            headers = forget(request)
-    else:
-        headers = forget(request)
-    return HTTPFound(location=request.route_url('index_route'),
-                     headers=headers)
+@view_config(route_name='login', renderer='../rick-mockups/login.jinja2')
+def login(request):
+    form = LoginForm(request.POST)
+    auth_username = request.registry.settings['auth.username']
+    auth_password = request.registry.settings['auth.password']
+    if request.method == 'POST':
+        if form.data['username'] == auth_username:
+            if sha256_crypt.verify(form.data['password']) == auth_password:
+                headers = remember(request, userid=auth_username)
+                return HTTPFound(Location='index_route', headers=headers)
+
+    return {}
+
+
+@view_config(route_name='logout', renderer='../rick-mockups/login.jinja2')
+def logout(request):
+    headers = forget(request)
+    return HTTPFound('/', headers=headers)
 
 
 class EntryForm(Form):
