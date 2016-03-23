@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from pyramid.view import view_config
 from .models import Entry, DBSession
 from wtforms import Form, StringField, TextAreaField, validators
@@ -61,8 +62,10 @@ def edit_post(request):
 @view_config(route_name='login', renderer='../rick-mockups/login.jinja2')
 def login(request):
     form = LoginForm(request.POST)
-    auth_username = request.registry.settings['auth.username']
-    auth_password = request.registry.settings['auth.password']
+    # auth_username = request.registry.settings['auth.username']
+    # auth_password = request.registry.settings['auth.password']
+    auth_username = os.environ.get['USER_NAME']
+    auth_password = os.environ.get['USER_PASSWORD']
     username = form.username.data
     password = form.password.data
     if request.method == 'POST' and form.validate():
