@@ -63,13 +63,15 @@ def login(request):
     form = LoginForm(request.POST)
     auth_username = request.registry.settings['auth.username']
     auth_password = request.registry.settings['auth.password']
-    if request.method == 'POST':
-        if form.data['username'] == auth_username:
-            if sha256_crypt.verify(form.data['password']) == auth_password:
-                headers = remember(request, userid=auth_username)
-                return HTTPFound(Location='index_route', headers=headers)
+    username = form.username.data
+    password = form.password.data
+    if request.method == 'POST' and form.validate():
+        if username == auth_username:
+            if sha256_crypt.verify(password, auth_password):
+                headers = remember(request, userid=username)
+                return HTTPFound('/', headers=headers)
 
-    return {}
+    return {'form': form}
 
 
 @view_config(route_name='logout', renderer='../rick-mockups/login.jinja2')

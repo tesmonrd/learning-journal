@@ -26,10 +26,11 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     settings['auth.username'] = os.environ.get('AUTH_USERNAME', 'headhoncho')
-    settings['auth.password'] = os.environ.get('AUTH_PASSWORD', sha256_crypt.encrypt('guest1234'))
-    authentication_policy = AuthTktAuthenticationPolicy(
-        'seekrit',
+    settings['auth.password'] = os.environ.get(
+        'AUTH_PASSWORD',
+        sha256_crypt.encrypt('guest1234')
     )
+    authentication_policy = AuthTktAuthenticationPolicy('seekrit')
     authorization_policy = ACLAuthorizationPolicy()
     config = Configurator(
         settings=settings,
