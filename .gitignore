@@ -59,10 +59,7 @@ production.ini
 MANIFEST.in
 CHANGES.txt
 static/
-paul-sheridan-mockups/
-rick-mockups/
-rick.ini
-paul.ini
+learning_journal.egg-info
 
 
 # Sphinx documentation

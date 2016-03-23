@@ -11,12 +11,13 @@
     <div class="top-bar">
         <div class="top-bar-left">
             <ul class="menu">
-                <li class="menu-text"><a href="./index.html">Rick Tesmond's Journal</a></li>
+                <li class="menu-text"><a href="/">Rick Tesmond's Journal</a></li>
             </ul>
         </div>
         <div class="top-bar-right">
             <ul class="menu">
-                <li><a href="./index.html">Return Home</a></li>
+                <li><a href="/">Return Home</a></li>
+                <li><a href="/login">Login</a><li>
             </ul>
         </div>
     </div>
@@ -26,15 +27,15 @@
             <h1>Code Fellows 401- Python Learning Journal</h1>
         </div>
     </div>
-    <div id="form">
-        <form>
-            Title:<br>
-            <input type="text"><br>
-            Text:<br>
-            <textarea col="100" rows="10"></textarea><br>
-        </form>
+    <div class="row" id="content">
+        <div class="medium-8 columns">
+            <div class="blog-post">
+                {% block content %}{% endblock %}
+        </div>
+        </div>
+        <a href="./add">Make new post</a>
     </div>
-    <footer>
+   <footer><br><br><br>
         <div class="footer">
         This is the code blog of Rick Tesmond
         </div>

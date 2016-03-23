@@ -1,11 +1,11 @@
 from datetime import datetime
+from jinja2 import Markup
+from pyramid.security import Allow, Everyone, Authenticated
+import markdown
 
 from sqlalchemy import (
     Column,
-    Index,
     Integer,
-    Text,
-    UnicodeText,
     Unicode,
     DateTime,
 )
@@ -29,3 +29,24 @@ class Entry(Base):
     title = Column(Unicode(120))
     text = Column(Unicode)
     created = Column(DateTime, default=datetime.utcnow)
+
+    @property
+    def rendered_text(self):
+        return render_markdown(self.text)
+
+
+def render_markdown(content):
+    marked = Markup(markdown.markdown(content))
+    return marked
+
+
+class BaseFactory(object):
+    __acl__ = [
+        (Allow, Everyone, 'view'),
+        (Allow, Authenticated, 'add'),
+        (Allow, Authenticated, 'edit'),
+    ]
+
+    def __init__(self,request):
+        pass
+
