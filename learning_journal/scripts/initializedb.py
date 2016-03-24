@@ -1,13 +1,14 @@
 import os
 import sys
 import transaction
-
+from passlib.hash import sha256_crypt
 from sqlalchemy import engine_from_config
+
 
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
+)
 
 from pyramid.scripts.common import parse_vars
 
@@ -15,7 +16,8 @@ from ..models import (
     DBSession,
     Entry,
     Base,
-    )
+    User,
+)
 
 
 def usage(argv):
@@ -32,9 +34,13 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
+    if 'DATABASE_URL' in os.environ:
+        settings['sqlalchemy.url'] = os.environ['DATABASE_URL']
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
-    # with transaction.manager:
-    #     entry = Entry(title, text)
-    #     DBSession.add(entry)
+    with transaction.manager:
+        password = os.environ.get('ADMIN_PASSWORD', 'admin')
+        encrypted = sha256_crypt.encrypt(password)
+        admin = User(name=u'admin', password=encrypted)
+        DBSession.add(admin)

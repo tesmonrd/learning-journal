@@ -2,6 +2,7 @@ from datetime import datetime
 from jinja2 import Markup
 from pyramid.security import Allow, Everyone, Authenticated
 import markdown
+import sqlalchemy as sa
 
 from sqlalchemy import (
     Column,
@@ -34,10 +35,17 @@ class Entry(Base):
     def rendered_text(self):
         return render_markdown(self.text)
 
+    @classmethod
+    def all(cls, session=None):
+        if session is None:
+            session = DBSession
+        return session.query(cls).order_by(sa.desc(cls.created)).all()
 
-def render_markdown(content):
-    marked = Markup(markdown.markdown(content))
-    return marked
+    @classmethod
+    def by_id(cls, id, session=None):
+        if session is None:
+            session = DBSession
+        return session.quesy(cls).get(id)
 
 
 class BaseFactory(object):
@@ -47,6 +55,23 @@ class BaseFactory(object):
         (Allow, Authenticated, 'edit'),
     ]
 
-    def __init__(self,request):
+    def __init__(self, request):
         pass
 
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(Unicode(255), unique=True, nullable=False)
+    password = Column(Unicode(255), nullable=False)
+
+    @classmethod
+    def by_name(cls, name, session=None):
+        if session is None:
+            session = DBSession
+        return DBSession.query(cls).filter(cls.name == name).first()
+
+
+def render_markdown(content):
+    marked = Markup(markdown.markdown(content))
+    return marked
