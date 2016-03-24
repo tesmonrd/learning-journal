@@ -55,7 +55,6 @@ coverage.xml
 # Pyramid stuff:
 .DS_Store
 setup.cfg
-production.ini
 MANIFEST.in
 CHANGES.txt
 static/
