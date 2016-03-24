@@ -4,6 +4,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from passlib.hash import sha256_crypt
 import os
+from pyramid.session import SignedCookieSessionFactory
 
 from .models import (
     DBSession,
@@ -22,6 +23,7 @@ def make_session(settings):
 def main(global_config, **settings):
     """Returns a Pyramid WSGI application.
     """
+    sessfac = SignedCookieSessionFactory('seecrit', hashalg='sha512')
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
@@ -36,7 +38,7 @@ def main(global_config, **settings):
         settings=settings,
         authentication_policy=authentication_policy,
         authorization_policy=authorization_policy,
-        root_factory=BaseFactory
+        root_factory=BaseFactory,
     )
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
@@ -47,4 +49,5 @@ def main(global_config, **settings):
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.scan()
+    config.set_session_factory(sessfac)
     return config.make_wsgi_app()

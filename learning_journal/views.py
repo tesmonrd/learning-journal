@@ -4,11 +4,16 @@ from .models import Entry, DBSession
 from wtforms import Form, StringField, TextAreaField, validators
 from pyramid.httpexceptions import HTTPFound
 from passlib.hash import sha256_crypt
+from pyramid.i18n import get_localizer
 from pyramid.security import (
     authenticated_userid,
     remember,
     forget,
 )
+try:
+    from wtforms.ext.csrf import SecureForm
+except ImportError:
+    from wtforms import Form as SecureForm
 
 
 @view_config(route_name='index_route', renderer='../rick-mockups/list.jinja2')
@@ -28,6 +33,8 @@ def view_post(request):
 
 
 @view_config(route_name='new_route', renderer='../rick-mockups/add.jinja2',
+             permission='add', check_csrf=True, request_method='POST')
+@view_config(route_name='new_route', renderer='../rick-mockups/add.jinja2',
              permission='add')
 def add_post(request):
     form = EntryForm(request.POST)
@@ -43,6 +50,8 @@ def add_post(request):
     return {'form': form, 'action': request.matchdict.get('action')}
 
 
+@view_config(route_name='edit_route', renderer='../rick-mockups/add.jinja2',
+             permission='edit', check_csrf=True, request_method='POST')
 @view_config(route_name='edit_route', renderer='../rick-mockups/add.jinja2',
              permission='edit')
 def edit_post(request):
