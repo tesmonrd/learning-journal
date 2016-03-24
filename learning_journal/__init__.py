@@ -21,7 +21,7 @@ def make_session(settings):
 def main(global_config, **settings):
     """Return a Pyramid WSGI application."""
     if 'DATABASE_URL' in os.environ:
-        settings['sqlalchemy.url'] = os.environ['DATABASE_URL']
+        settings['sqlalchemy.url'] = os.environ('DATABASE_URL')
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine

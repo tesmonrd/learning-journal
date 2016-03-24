@@ -62,8 +62,8 @@ def edit_post(request):
 @view_config(route_name='login', renderer='../rick-mockups/login.jinja2')
 def login(request):
     form = LoginForm(request.POST)
-    auth_username = os.environ.get['USER_NAME']
-    auth_password = os.environ.get['AUTH_SECRET']
+    auth_username = os.environ.get('USER_NAME')
+    auth_password = os.environ.get('AUTH_SECRET')
     username = form.username.data
     password = form.password.data
     if request.method == 'POST' and form.validate():
