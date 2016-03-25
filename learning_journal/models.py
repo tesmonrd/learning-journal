@@ -33,21 +33,18 @@ class Entry(Base):
 
     @property
     def rendered_text(self):
+        """Markdown."""
         return render_markdown(self.text)
 
     @classmethod
     def all(cls, session=None):
+        """Order db entries by decending date created."""
         if session is None:
             session = DBSession
         return session.query(cls).order_by(sa.desc(cls.created)).all()
 
-    @classmethod
-    def by_id(cls, id, session=None):
-        if session is None:
-            session = DBSession
-        return session.quesy(cls).get(id)
-
     def __json__(self, request):
+        """Create a JSON object using entry."""
         return {
             'id': self.id,
             'title': self.title,
