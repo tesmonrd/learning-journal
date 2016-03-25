@@ -47,6 +47,14 @@ class Entry(Base):
             session = DBSession
         return session.quesy(cls).get(id)
 
+    def __json__(self, request):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'text': self.text,
+            'created': self.created
+        }
+
 
 class BaseFactory(object):
     __acl__ = [
