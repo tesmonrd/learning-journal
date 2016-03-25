@@ -2,6 +2,7 @@ from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.authentication import AuthTktAuthenticationPolicy
+from passlib.hash import sha256_crypt
 import os
 
 from .models import (
@@ -25,6 +26,11 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+    settings['auth.username'] = os.environ.get('AUTH_USERNAME', 'headhoncho')
+    settings['auth.password'] = os.environ.get(
+        'AUTH_PASSWORD',
+        sha256_crypt.encrypt('guest1234')
+    )
     secret = os.environ.get('dsfkljfvjkvnadssvjkbavhfdlbvhfdlv', 'vndjkvbndlv')
     authentication_policy = AuthTktAuthenticationPolicy(secret)
     authorization_policy = ACLAuthorizationPolicy()
