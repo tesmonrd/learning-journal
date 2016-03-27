@@ -1,7 +1,16 @@
 {% extends "base.jinja2" %}
+{% block menu}
+{% if request.has_permission('edit') %}
+<li><a href="/logout">Logout</a></li>
+{% else %}
+<li><a href="login">Log in</a></li>
+{% endif %}
+{% endblock %}
 {% block content %}
     <h1>{{ entry.title }}</h1>
     <h3>Created on: {{ entry.time }}</h3
     <p>{{ entry.rendered_text }}</p>
+    {% if request.has_permission('edit') %}
     <a href="/entries/{{entry.id}}/edit">Edit</a>
+    {% endif %}
 {% endblock %}

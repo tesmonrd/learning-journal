@@ -7,38 +7,39 @@
     <link rel="stylesheet" href="http://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
 </head>
 
-<body>
-    <div class="top-bar">
-        <div class="top-bar-left">
-            <ul class="menu">
-                <li class="menu-text"><a href="/">Rick Tesmond's Journal</a></li>
-            </ul>
+    <body>
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <ul class="menu">
+                    <li class="menu-text"><a href="/">Rick Tesmond's Journal</a></li>
+                </ul>
+            </div>
+            <div class="top-bar-right">
+                <ul class="menu">
+                    <li><a href="/">Return Home</a></li>
+                    {% block menu %}{% endblock %}
+                </ul>
+            </div>
         </div>
-        <div class="top-bar-right">
-            <ul class="menu">
-                <li><a href="/">Return Home</a></li>
-                <li><a href="/login">Login</a><li>
-            </ul>
+
+        <div class="callout large primary">
+            <div class="row column text-center">
+                <h1>Code Fellows 401- Python Learning Journal</h1>
+            </div>
         </div>
-    </div>
- 
-    <div class="callout large primary">
-        <div class="row column text-center">
-            <h1>Code Fellows 401- Python Learning Journal</h1>
+        <div class="row" id="content">
+            <div class="medium-8 columns">
+                <div class="blog-post">
+                    {% block content %}{% endblock %}
+            </div>
+            </div>
         </div>
-    </div>
-    <div class="row" id="content">
-        <div class="medium-8 columns">
-            <div class="blog-post">
-                {% block content %}{% endblock %}
-        </div>
-        </div>
-        <a href="./add">Make new post</a>
-    </div>
-   <footer><br><br><br>
-        <div class="footer">
-        This is the code blog of Rick Tesmond
-        </div>
-    </footer>
-</body>
+        <footer><br><br><br>
+            <div class="footer">
+            This is the code blog of Rick Tesmond
+            </div>
+        </footer>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/ajax.js"></script>
 </html>

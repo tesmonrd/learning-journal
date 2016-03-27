@@ -1,4 +1,13 @@
 {% extends 'base.jinja2' %}
+{% block menu}
+{% if request.has_permission('edit') %}
+<li><a href="/logout">Logout</a></li>
+<li><a href="/add">Add New Post!</li
+{% else %}
+<li><a href="login">Log in</a></li>
+{% endif %}
+{% endblock %}
+
 {% block content%}
     <article class="entries">
         {% for entry in entries %}
