@@ -1,5 +1,5 @@
 {% extends "base.jinja2" %}
-{% block menu}
+{% block menu %}
     {% if request.has_permission('edit') %}
     <li><a href="/logout">Logout</a></li>
     {% else %}
