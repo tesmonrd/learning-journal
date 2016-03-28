@@ -1,7 +1,7 @@
 from learning_journal.models import DBSession, Entry
 import json
 import os
-import request
+import requests
 
 
 def get_response():
@@ -10,7 +10,7 @@ def get_response():
     full_url = endpoint_url + api_key
     username = 'tesmonrd'
     params = {"username": username}
-    response = request.get(full_url, params=params)
+    response = requests.get(full_url, params=params)
     return response.text
 
 
