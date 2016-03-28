@@ -31,6 +31,17 @@ class Entry(Base):
     text = Column(Unicode)
     created = Column(DateTime, default=datetime.utcnow)
 
+    def __json__(self, request):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'text': self.text,
+            'created': self.created.isoformat
+        }
+
+    def to_json(self, request=None):
+        return self.__json__(request)
+
     @property
     def rendered_text(self):
         return render_markdown(self.text)
