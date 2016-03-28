@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 from pyramid.view import view_config
+from .api_load import populate_list_api
 from .models import Entry, DBSession
 from wtforms import Form, StringField, TextAreaField, validators
 from pyramid.httpexceptions import HTTPFound
 from passlib.hash import sha256_crypt
 from pyramid.security import (
-    authenticated_userid,
     remember,
     forget,
 )
@@ -14,11 +14,15 @@ from pyramid.security import (
 
 @view_config(route_name='index_route', renderer='../rick-mockups/list.jinja2')
 def post_index(request):
-    entries = DBSession.query(Entry).all()
-    form = None
-    if not authenticated_userid(request):
-        form = LoginForm()
-    return {'entries': entries, 'login_form': form}
+    entries = DBSession.query(Entry).count()
+    print(entries)
+    if entries is 0:
+        populate_list_api()
+    entries = DBSession.query(Entry)
+    # form = None
+    # if not authenticated_userid(request):
+    #     form = LoginForm()
+    return {'entries': entries}
 
 
 @view_config(route_name='entry_route', renderer='../rick-mockups/entry.jinja2')
