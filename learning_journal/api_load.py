@@ -1,7 +1,7 @@
 from learning_journal.models import DBSession, Entry
-import requests
 import json
 import os
+import requests
 
 
 def get_response():
